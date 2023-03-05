@@ -1,6 +1,4 @@
 type QueryResponse = {
-  session_id: string,
-  response_id: string,
   response_text: string
 }
 
@@ -12,6 +10,18 @@ export async function queryTutor(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ query: prompt }),
+    body: JSON.stringify({ prompt }),
+  }).then((res) => res.json())) as QueryResponse;
+}
+
+export async function queryFeedback(
+  prompt: string,
+): Promise<QueryResponse> {
+  return (await fetch(`api/feedback`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ prompt }),
   }).then((res) => res.json())) as QueryResponse;
 }

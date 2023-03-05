@@ -5,6 +5,7 @@ import IconButtonWithLoading from "../components/IconPrimaryButtonWithLoading";
 import MessageBubble from "../components/MessageBubble";
 import SuggestionTag from "./SuggestionTag";
 import { queryTutor } from "../util/client";
+import { constructTutorPrompt, getInitialMessage } from "../util/langchain";
 
 type HistoryItem = {
   author: "You" | "AI";
@@ -17,25 +18,24 @@ type ChatInterfaceProps = {
   version: string;
 };
 
+// TODO add "show translation button", "get feedback button"
 export default function ChatInterface() {
   const [prompt, setPrompt] = useState("");
-  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([{ author: "AI", message: getInitialMessage()}]);
   const [loading, setLoading] = useState(false);
-  const [responseId, setResponseId] = useState("");
   const messagesEndRef: any = useRef(null);
   const suggestionTemplates = [
     "你好！",
+    "我最近很忙",
     "我有一個問題： ..."
   ];
 
-  const queryDeepPromptService = async (
-    prompt: string,
-    historyWithUser: HistoryItem[]
+  const queryChineseTutor = async (
+    conversationSoFar: HistoryItem[]
   ) => {
     try {
-      const response = await queryTutor(prompt);
-      setResponseId(response.response_id);
-      handleReply(response.response_text.trim(), historyWithUser);
+      const response = await queryTutor(constructTutorPrompt(conversationSoFar));
+      handleReply(response.response_text.trim(), conversationSoFar);
     } catch (e) {
       alert("exception querying deepprompt service: " + e);
     }
@@ -77,7 +77,7 @@ export default function ChatInterface() {
       setPrompt("");
       setLoading(true);
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      queryDeepPromptService(prompt, historyWithUser);
+      queryChineseTutor(historyWithUser);
     }
   };
 
@@ -146,3 +146,5 @@ export default function ChatInterface() {
     </div>
   );
 }
+
+export type { HistoryItem }
