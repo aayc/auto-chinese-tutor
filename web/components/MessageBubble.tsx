@@ -5,10 +5,10 @@ import Prism from "prismjs";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import dracula from "prism-react-renderer/themes/dracula";
 import { constructFeedbackPrompt } from "../util/langchain";
-import { queryFeedback } from "../util/client";
+import { queryFeedback, queryTranslation } from "../util/client";
 
 type MessageBubbleProps = {
-  author: "You" | "AI";
+  author: "You" | "Tutor";
   message: string;
 };
 
@@ -49,7 +49,7 @@ export default function MessageBubble({ author, message }: MessageBubbleProps) {
           style={{ whiteSpace: "pre-wrap" }}
           className={`w-full max-w-4xl ml-2 mr-4 break-words text-black ${colorBg}`}
         >
-          {part}
+          {part} {showTranslation && "(" + translation + ")"}
         </p>
       );
     } else {
@@ -85,9 +85,17 @@ export default function MessageBubble({ author, message }: MessageBubbleProps) {
     Prism.highlightAll();
   }, []);
 
-  const handleTranslation = (e: any) => {
+  const handleTranslation = async (e: any) => {
     e.preventDefault();
-    console.log("Translate");
+    try {
+      setLoadingTranslation(true);
+      const translation = await queryTranslation(message);
+      setShowTranslation(!showTranslation);
+      setTranslation(translation.response_text);
+      setLoadingTranslation(false);
+    } catch (e) {
+      alert("exception querying translation: " + e);
+    }
   };
 
   const handleFeedback = async (e: any) => {
@@ -110,25 +118,34 @@ export default function MessageBubble({ author, message }: MessageBubbleProps) {
         <div className="w-32 text-right">
           <p className="font-semibold">{author}:</p>
         </div>
-        <div className="w-full flex justify-between">
-          <div>{fullMessage}</div>
-          <div className="">
-            {!isAI && (
+        <div className="w-full">
+          <div className="flex justify-between">
+            <div>{fullMessage}</div>
+            <div className="">
+              {!isAI && (
+                <IconButtonWithLoading
+                  loading={loadingFeedback || showFeedback}
+                  onClick={handleFeedback}
+                >
+                  <BarChart3 size={20} className="text-white"></BarChart3>
+                </IconButtonWithLoading>
+              )}
               <IconButtonWithLoading
-                loading={loadingFeedback}
-                onClick={handleFeedback}
+                loading={loadingTranslation || showTranslation}
+                onClick={handleTranslation}
+                className="mx-2"
               >
-                <BarChart3 size={20} className="text-white"></BarChart3>
+                <Globe size={20} className="text-white"></Globe>
               </IconButtonWithLoading>
-            )}
-            <IconButtonWithLoading
-              loading={loadingTranslation}
-              onClick={handleTranslation}
-              className="mx-2"
-            >
-              <Globe size={20} className="text-white"></Globe>
-            </IconButtonWithLoading>
+            </div>
           </div>
+
+          {showFeedback && (
+            <div>
+              <p className="text-sm text-gray-500">Feedback:</p>
+              <p className="text-sm text-gray-500">{feedback}</p>
+            </div>
+          )}
         </div>
       </div>
       <hr></hr>

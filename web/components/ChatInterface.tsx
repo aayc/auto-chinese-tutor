@@ -8,20 +8,13 @@ import { queryTutor } from "../util/client";
 import { constructTutorPrompt, getInitialMessage } from "../util/langchain";
 
 type HistoryItem = {
-  author: "You" | "AI";
+  author: "You" | "Tutor";
   message: string;
 };
 
-type ChatInterfaceProps = {
-  userToken: string;
-  sessionId: string;
-  version: string;
-};
-
-// TODO add "show translation button", "get feedback button"
 export default function ChatInterface() {
   const [prompt, setPrompt] = useState("");
-  const [history, setHistory] = useState<HistoryItem[]>([{ author: "AI", message: getInitialMessage()}]);
+  const [history, setHistory] = useState<HistoryItem[]>([{ author: "Tutor", message: getInitialMessage()}]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef: any = useRef(null);
   const suggestionTemplates = [
@@ -44,7 +37,7 @@ export default function ChatInterface() {
   const handleReply = (reply: string, historyWithUser: HistoryItem[]) => {
     const historyWithBot: HistoryItem[] = [
       ...historyWithUser,
-      { author: "AI", message: reply },
+      { author: "Tutor", message: reply },
     ];
     setHistory(historyWithBot);
     setLoading(false);
@@ -54,7 +47,7 @@ export default function ChatInterface() {
   const handleClear = (e: any) => {
     if (!loading) {
       e.preventDefault();
-      setHistory([]);
+      setHistory(history.slice(0, 1));
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   };
@@ -103,7 +96,7 @@ export default function ChatInterface() {
 
       <div className="fixed left-1/2 -translate-x-1/2 bottom-0 w-full bg-white">
         <div className="max-w-3xl m-auto pb-6">
-          <div className="flex flex-wrap">
+          {history.length < 2 &&  <div className="flex flex-wrap">
             {suggestionTemplates.map((text) => (
               <SuggestionTag
                 key={text}
@@ -111,7 +104,7 @@ export default function ChatInterface() {
                 onClick={() => useSuggestion(text)}
               ></SuggestionTag>
             ))}
-          </div>
+          </div>}
           <div className="flex w-full">
             <IconButtonWithLoading loading={loading} onClick={handleRecord} className="mr-2">
               <Mic size={24} className="text-white"></Mic>
@@ -134,12 +127,6 @@ export default function ChatInterface() {
             <IconButtonWithLoading loading={loading} onClick={handleClear} className="ml-2">
               <RefreshCcw size={24} className="text-white"></RefreshCcw>
             </IconButtonWithLoading>
-          </div>
-          <div className="text-gray-400 text-xs text-center mt-2">
-            <p>Copyright 2023 Aaron Chan</p>
-            <p className="mt-1">
-              My goal is to make this a useful tool for learning Chinese.
-            </p>
           </div>
         </div>
       </div>
