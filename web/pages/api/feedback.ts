@@ -17,7 +17,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             "api-key": api_key!,
             "Content-Type": "application/json"
         }
-    console.log(payload)
     const response = await axios.post(url, payload, { headers })
     const response_text = response.data.choices[0].text
 

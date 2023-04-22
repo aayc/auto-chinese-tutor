@@ -83,3 +83,261 @@ a {
       transform: translate(24px, 0);
   }
 }
+
+
+@font-face {
+  font-family: 'radikalbold_italic';
+  src: url('./radikal-font/nootype_-_radikal_bold_italic-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_bold_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikalbold';
+  src: url('./radikal-font/nootype_-_radikal_bold-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_bold-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikalitalic';
+  src: url('./radikal-font/nootype_-_radikal_italic-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikallight_italic';
+  src: url('./radikal-font/nootype_-_radikal_light_italic-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_light_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikallight';
+  src: url('./radikal-font/nootype_-_radikal_light-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_light-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikalmedium_italic';
+  src: url('./radikal-font/nootype_-_radikal_medium_italic-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_medium_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikalmedium';
+  src: url('./radikal-font/nootype_-_radikal_medium-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_medium-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikalthin_italic';
+  src: url('./radikal-font/nootype_-_radikal_thin_italic-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_thin_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikalthin';
+  src: url('./radikal-font/nootype_-_radikal_thin-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_thin-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikalultrathin_italic';
+  src: url('./radikal-font/nootype_-_radikal_ultrathin_italic-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal_ultrathin_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'radikalregular';
+  src: url('./radikal-font/nootype_-_radikal-webfont.woff2') format('woff2'),
+       url('./radikal-font/nootype_-_radikal-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.bg-dark { background-color: #112B3C }
+.text-dark { color: #112B3C }
+.bg-primary { background-color: #205375 }
+.text-primary { color: #205375 }
+.bg-accent { background-color: #F66B0E }
+.text-accent { color: #F66B0E }
+.bg-light { background-color: #EFEFEF }
+.text-light { color: #EFEFEF }
+
+html,
+body {
+padding: 0;
+margin: 0;
+font-family: "radikalregular", sans-serif;
+}
+
+circle,
+rect,
+line {
+stroke-linecap: round;
+fill: transparent;
+}
+
+h1 {
+font-family: "radikalbold";
+line-height: 5.4;
+@apply text-8xl;
+}
+
+h2 {
+font-family: "radikalbold";
+line-height: 5.4;
+@apply text-5xl;
+}
+
+h3 {
+font-family: "radikalbold";
+line-height: 5.4;
+@apply text-2xl;
+}
+
+h4 {
+font-family: "radikalregular";
+line-height: 5.4;
+@apply text-2xl;
+}
+
+p {
+font-family: "radikallight";
+@apply text-xl;
+}
+
+
+a,
+Link {
+@apply text-blue-400;
+@apply hover:text-blue-600;
+@apply transition-colors;
+}
+
+.black_link {
+@apply text-black;
+@apply hover:text-black;
+}
+
+ul {
+@apply text-xl;
+@apply list-disc;
+@apply pl-12;
+}
+
+* {
+box-sizing: border-box;
+}
+.hover\:underline-animation {
+display: inline-block;
+position: relative;
+/*color: #0087ca;*/
+}
+
+.hover\:underline-animation:after {
+content: "";
+position: absolute;
+width: 100%;
+transform: scaleX(0);
+height: 2px;
+bottom: 0;
+left: 0;
+background-color: #000;
+transform-origin: bottom right;
+transition: transform 0.25s ease-out;
+}
+
+.hover\:underline-animation:hover:after {
+transform: scaleX(1);
+transform-origin: bottom left;
+}
+
+.hover\:underline-animation-white {
+display: inline-block;
+position: relative;
+@apply cursor-pointer;
+@apply mb-12;
+@apply transition;
+@apply duration-300;
+@apply ease-in-out;
+@apply hover:-translate-y-1;
+/*color: #0087ca;*/
+}
+
+.hover\:underline-animation-white:after {
+content: "";
+position: absolute;
+width: 100%;
+transform: scaleX(0);
+height: 2px;
+bottom: 0;
+left: 0;
+background-color: #fff;
+transform-origin: bottom right;
+transition: transform 0.25s ease-out;
+}
+
+.hover\:underline-animation-white:hover:after {
+transform: scaleX(1);
+transform-origin: bottom left;
+}
+
+.code {
+font-family: Consolas;
+}
+
+.max-w-112 {
+max-width: 32rem;
+width: 32rem;
+}
+
+.popover {
+position: absolute;
+left: 0;
+right: 0;
+opacity: 0;
+transform-origin: center -20px;
+transform: rotateX(-15deg);
+transition:
+  transform var(--transition-duration),
+  opacity var(--transition-duration);
+background: red;
+display: inline-block;
+}
+
+.popover.open {
+opacity: 1;
+transform: rotateX(0);
+}
+
+@media (min-width: 768px) {
+.md\:max-w-112 {
+  max-width: 32rem;
+  width: 32rem;
+}
+}
+
+@media (min-width: 200px) {
+.mdsm\:grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+}

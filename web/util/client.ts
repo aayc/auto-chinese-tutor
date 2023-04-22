@@ -13,8 +13,6 @@ export async function queryTutor(
     body: JSON.stringify({ prompt }),
   }).then((res) => res.json())) as QueryResponse;
   response.response_text = response.response_text.replace("<|im_end|>", "").trim()
-  console.log(prompt)
-  console.log(response.response_text)
   return response
 }
 

@@ -1,28 +1,35 @@
 import Head from "next/head";
-import { useEffect } from "react";
 import ChatInterface from "../components/ChatInterface";
-import { useRouter } from "next/router";
-import WelcomeModal from "../components/WelcomeModal";
+import { auth } from "../util/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import LoginForm from "../components/LoginForm";
+import NavBar from "../components/NavBar";
 
 export default function Home() {
+  const [user, loading, error] = useAuthState(auth);
+
+  const widget = () => {
+    if (loading) {
+      return <div className="text-center">Loading...</div>;
+    } else if (user) {
+      return <ChatInterface user={user}></ChatInterface>;
+    } else if (error) {
+      return <div>Error: {error.message}</div>;
+    } else {
+      return <LoginForm></LoginForm>;
+    }
+  };
+
   return (
     <>
-      <WelcomeModal></WelcomeModal>
-
       <div>
         <Head>
           <title>Auto Chinese Tutor</title>
         </Head>
 
-        <div className="fixed w-full top-0">
-          <div className="flex justify-between mt-4 mx-4">
-            <h1 className="text-md font-bold"></h1>
-          </div>
-        </div>
-
-        <main className="mt-12">
-          <ChatInterface
-          ></ChatInterface>
+        <main className="">
+          <NavBar></NavBar>
+          <div className="mt-6">{widget()}</div>
         </main>
       </div>
     </>

@@ -12,23 +12,6 @@ type MessageBubbleProps = {
   message: string;
 };
 
-function splitMessageIntoTextAndCode(message: string): string[] {
-  const messageParts = message
-    .split(/<code language='(.*)'>|<\/code>/)
-    .filter((part) => part && part !== "");
-  const textParts = messageParts.filter((part, index) => index % 3 == 0);
-  const languageParts = messageParts.filter((part, index) => index % 3 == 1);
-  const codeParts = messageParts.filter((part, index) => index % 3 == 2);
-  const textAndCodeParts = [];
-  for (let i = 0; i < textParts.length; i++) {
-    textAndCodeParts.push(textParts[i]);
-    if (i < codeParts.length) {
-      textAndCodeParts.push(`${languageParts[i]} ${codeParts[i]}`);
-    }
-  }
-  return textAndCodeParts;
-}
-
 export default function MessageBubble({ author, message }: MessageBubbleProps) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedback, setFeedback] = useState("");
@@ -40,50 +23,6 @@ export default function MessageBubble({ author, message }: MessageBubbleProps) {
 
   const colorBg = author === "You" ? "bg-white" : "bg-gray-100";
   const isAI = author !== "You";
-  const messageParts = splitMessageIntoTextAndCode(message);
-  const fullMessage = messageParts.map((part, index) => {
-    if (index % 2 == 0) {
-      return (
-        <p
-          key={part}
-          style={{ whiteSpace: "pre-wrap" }}
-          className={`w-full max-w-4xl ml-2 mr-4 break-words text-black ${colorBg}`}
-        >
-          {part} {showTranslation && "(" + translation + ")"}
-        </p>
-      );
-    } else {
-      const language = part.split(" ")[0];
-      const code = part.split(" ").slice(1).join(" ");
-      return (
-        <Highlight
-          {...defaultProps}
-          code={code}
-          theme={dracula}
-          language={language as any}
-        >
-          {({ className, style, tokens, getLineProps, getTokenProps }) => (
-            <pre
-              className={className + " py-2 px-8"}
-              style={{ ...style, backgroundColor: "rgb(45, 45, 45)" }}
-            >
-              {tokens.map((line, i) => (
-                <div {...getLineProps({ line, key: i })}>
-                  {line.map((token, key) => (
-                    <span {...getTokenProps({ token, key })} />
-                  ))}
-                </div>
-              ))}
-            </pre>
-          )}
-        </Highlight>
-      );
-    }
-  });
-
-  useEffect(() => {
-    Prism.highlightAll();
-  }, []);
 
   const handleTranslation = async (e: any) => {
     e.preventDefault();
@@ -109,23 +48,34 @@ export default function MessageBubble({ author, message }: MessageBubbleProps) {
     } catch (e) {
       alert("exception querying tutor: " + e);
     }
-    console.log("Query Feedback");
   };
 
   return (
     <div className={`${colorBg}`}>
       <div className={`flex py-2 -z-10`}>
-        <div className="w-32 text-right">
-          <p className="font-semibold">{author}:</p>
+        <div className="w-16 text-right">
+          <p className="text-md font-semibold" style={{ fontSize: "12pt"}}>{author}:</p>
         </div>
         <div className="w-full">
           <div className="flex justify-between">
-            <div>{fullMessage}</div>
-            <div className="">
+        <div
+          className={`w-full ml-2 mr-4 break-words text-black ${colorBg}`}
+        >
+          <p style={{ whiteSpace: "pre-wrap" }}>{message}</p>
+          {showTranslation && "(" + translation + ")"}
+          {showFeedback && (
+            <div>
+              <p className="text-sm text-gray-500">Feedback:</p>
+              <p className="text-sm text-gray-500">{feedback}</p>
+            </div>
+          )}
+        </div>
+            <div className="flex">
               {!isAI && (
                 <IconButtonWithLoading
                   loading={loadingFeedback || showFeedback}
                   onClick={handleFeedback}
+                  className="h-9"
                 >
                   <BarChart3 size={20} className="text-white"></BarChart3>
                 </IconButtonWithLoading>
@@ -133,19 +83,12 @@ export default function MessageBubble({ author, message }: MessageBubbleProps) {
               <IconButtonWithLoading
                 loading={loadingTranslation || showTranslation}
                 onClick={handleTranslation}
-                className="mx-2"
+                className="mx-2 h-9"
               >
                 <Globe size={20} className="text-white"></Globe>
               </IconButtonWithLoading>
             </div>
           </div>
-
-          {showFeedback && (
-            <div>
-              <p className="text-sm text-gray-500">Feedback:</p>
-              <p className="text-sm text-gray-500">{feedback}</p>
-            </div>
-          )}
         </div>
       </div>
       <hr></hr>
