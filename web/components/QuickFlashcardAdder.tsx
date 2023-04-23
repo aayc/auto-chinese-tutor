@@ -1,11 +1,13 @@
+import { User } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { queryLanguage, queryPinyin, queryTranslation } from "../util/client";
+import { addFlashcard } from "../util/firebase";
 
-export default function QuickFlashcardAdder() {
+export default function QuickFlashcardAdder(props: { user: User }) {
   const [added, setAdded] = useState(false);
   const [definition, setDefinition] = useState<string | undefined>(undefined);
-  const [pinyin, setPinyin] = useState<string | undefined>(undefined);
-  const [notes, setNotes] = useState<string | undefined>(undefined);
+  const [pinyin, setPinyin] = useState<string>("");
+  const [notes, setNotes] = useState<string>("");
   const [selectedText, setSelectedText] = useState<string | undefined>(
     undefined
   );
@@ -43,8 +45,12 @@ export default function QuickFlashcardAdder() {
   const tryAddFlashcard = async () => {
     if (selectedText && selectedText.length > 0 && definition && definition.length > 0) {
       if (!added) {
-        //addFlashcard(selectedText.trim(), "zh", definition, { notes, pinyin: translateToPinyin(selectedText) })
-        setAdded(true);
+        try {
+          await addFlashcard(props.user, "zh", "Unorganized", selectedText.trim(), definition, pinyin || "", notes || "");
+          setAdded(true);
+        } catch (e) {
+          alert("Error adding flashcard: " + e);
+        }
       } else {
         alert("This flashcard has already been added.");
       }

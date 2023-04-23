@@ -10,7 +10,6 @@ export default function NavBar() {
       <div>
         <NavLink href="/chat">chat</NavLink>
         <NavLink href="/study">study</NavLink>
-        <NavLink href="/support">support</NavLink>
       </div>
     </div>
   );

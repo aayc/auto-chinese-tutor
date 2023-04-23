@@ -73,3 +73,9 @@ export async function editConversationTitle(user: User, conversationId: string, 
     const conversationTitleRef = ref(database, `${user.uid}/conversations/${conversationId}/title`);
     await set(conversationTitleRef, title);
 }
+
+export async function addFlashcard(user: User, language: "zh" | "es" | "en", cardSet: string, term: string, definition: string, pinyin: string, notes: string) {
+    const flashcardRef = ref(database, `${user.uid}/flashcards/${cardSet}`);
+    const newFlashcardRef = push(flashcardRef);
+    await set(newFlashcardRef, { language, term, definition, pinyin, notes });
+}
