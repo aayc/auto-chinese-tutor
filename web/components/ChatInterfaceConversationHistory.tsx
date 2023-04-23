@@ -113,11 +113,12 @@ export default function ChatInterfaceConversationHistory(
         return (
           <div className="flex" key={`snapshot${i}`}>
             <div
-              className={`transition ease-in-out duration-200 hover:opacity-50 hover:cursor-pointer rounded-l-lg mt-2 p-4 bg-gray-50 w-72 flex justify-between text-sm ${
+              className={`"border-l-2 border-y-2 transition ease-in-out duration-200 hover:opacity-50 hover:cursor-pointer rounded-l-lg mt-2 p-3 bg-gray-50 w-72 flex justify-between text-sm ${
                 props.currentConversationId === snapshot?.key
-                  ? "bg-black text-white"
-                  : ""
+                  ? "border-black"
+                  : "border-white"
               }`}
+              style={{"borderLeftWidth": "2px"}}
               key={snapshot.val()["title"]}
               onClick={() => changeConversation(snapshot?.key)}
             >
@@ -128,7 +129,12 @@ export default function ChatInterfaceConversationHistory(
                 </p>
               </div>
             </div>
-            <div className="flex text-black mt-2 p-4 rounded-r-lg bg-gray-50 w-20">
+            <div className={`border-r-2 border-y-2 transition ease-in-out duration-200 flex text-black mt-2 p-4 rounded-r-lg bg-gray-50 w-20 ${
+              
+                props.currentConversationId === snapshot?.key
+                  ? "border-black"
+                  : "border-white"
+            }`}>
               <Edit
                 size={16}
                 onClick={() => setupModal(snapshot?.key, setShowEditModal)}

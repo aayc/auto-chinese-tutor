@@ -16,6 +16,7 @@ import ChatInterfaceMessageHistory, {
 } from "./ChatInterfaceMessageHistory";
 import moment from "moment";
 import ChatInterfaceConversationHistory from "./ChatInterfaceConversationHistory";
+import QuickFlashcardAdder from "./QuickFlashcardAdder";
 
 type ChatInterfaceProps = {
   user: User;
@@ -45,12 +46,16 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
   useEffect(() => {
     if (conversationId) {
-      const title = conversations?.filter((conversation) => conversation.key == conversationId)[0].val().title
-      const date = conversations?.filter((conversation) => conversation.key == conversationId)[0].val().created
-      setConversationTitle(title)
-      setConversationDate(date)
+      const title = conversations
+        ?.filter((conversation) => conversation.key == conversationId)[0]
+        .val().title;
+      const date = conversations
+        ?.filter((conversation) => conversation.key == conversationId)[0]
+        .val().created;
+      setConversationTitle(title);
+      setConversationDate(date);
     }
-  })
+  }, []);
 
   const handleClear = async (e: any) => {
     if (!loading) {
@@ -96,18 +101,28 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
   return (
     <div className="flex max-w-7xl px-6 m-auto justify-between min-h-screen">
-      <ChatInterfaceConversationHistory
-        user={props.user}
-        currentConversationId={conversationId || ""}
-        conversations={conversations}
-        onChangeConversation={setConversationId}
-      ></ChatInterfaceConversationHistory>
-
+      <div>
+        <div>
+          <ChatInterfaceConversationHistory
+            user={props.user}
+            currentConversationId={conversationId || ""}
+            conversations={conversations}
+            onChangeConversation={setConversationId}
+          ></ChatInterfaceConversationHistory>
+        </div>
+        <div className="mt-8">
+        <QuickFlashcardAdder />
+        </div>
+        
+      </div>
       <div className="w-full max-w-3xl mb-24 flex flex-col flex-1 justify-between">
         <div>
           <div className="flex justify-between mb-4">
             <p className="font-semibold text-sm">{conversationTitle}</p>
-            <p className="text-sm">{conversationDate && moment(conversationDate).format("MM-DD-YYYY")}</p>
+            <p className="text-sm">
+              {conversationDate &&
+                moment(conversationDate).format("MM-DD-YYYY")}
+            </p>
           </div>
           <ChatInterfaceMessageHistory
             user={props.user}

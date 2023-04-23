@@ -41,3 +41,27 @@ export async function queryTranslation(
     body: JSON.stringify({ text }),
   }).then((res) => res.json())) as QueryResponse;
 }
+
+export async function queryPinyin(
+  text: string,
+): Promise<QueryResponse> {
+  return (await fetch(`api/pinyin`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text }),
+  }).then((res) => res.json())) as QueryResponse;
+}
+
+export async function queryLanguage(
+  text: string,
+): Promise<QueryResponse> {
+  return (await fetch(`api/lang`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text }),
+  }).then((res) => res.json())) as QueryResponse;
+}
