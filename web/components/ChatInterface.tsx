@@ -111,7 +111,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
           ></ChatInterfaceConversationHistory>
         </div>
         <div className="mt-8">
-        <QuickFlashcardAdder />
+        <QuickFlashcardAdder user={props.user} />
         </div>
         
       </div>
